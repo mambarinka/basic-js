@@ -16,4 +16,4 @@ module.exports = function dateSample(sampleActivity) {
 
   }
   return ageExcavation;
-}
+};
