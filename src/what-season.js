@@ -1,18 +1,18 @@
 const CustomError = require("../extensions/custom-error");
 
 module.exports = function getSeason(date) {
-// const getSeason = function (date) {
 
-  if (date == null || date == undefined || date == false) {
+  if (!date) { // если в аргумент передано пустое значение
     return 'Unable to determine the time of year!';
+  } else if (!(date instanceof Date)) { // если data не имеет тип Object и граничные случаи объекта Date
+    throw Error('Error');
+  } else if (Object.prototype.toString.call(date) !== '[object Date]') { // если переданный арг-т не явл. объектом new Date
+    throw new Error('THROWN');
   }
-  /* else if (Object.prototype.toString.call(date) !== '[object Date]') {
-    throw Error;
-} */
 
   let month = date.getMonth();
 
-  switch (String(month)) {
+  switch (String(month + 1)) {
     case '12':
     case '1':
     case '2':
@@ -36,9 +36,4 @@ module.exports = function getSeason(date) {
     default:
       throw new Error('Error');
   }
-
 };
-
-// getSeason(new Date(2150, 7, 21, 18, 36, 41, 841));
-// getSeason('1');
-
