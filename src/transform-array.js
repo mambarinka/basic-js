@@ -2,42 +2,59 @@ const CustomError = require("../extensions/custom-error");
 
 // module.exports = function transform(arr) {
 function transform(arr) {
+  if (!Array.isArray(arr)) {
+    throw new Error('argument is nor array');
+  }
 
-  // const manageSequences = {
-  //   '--discard-next': function(array) {
-  // array.splice
-  //   },
-  //   '--discard-prev': '',
-  //   '--double-next': '',
-  //   '--double-prev': '',
-  // };
-  let newArr = arr.slice();
-  console.log(`newArr15: ${newArr}`);
-
+  // let newArr = [...arr];
+  let newArr = Object.assign([], arr);
+  console.log(newArr);
+  let steck = 0;
   for (let i = 0; i < newArr.length; i++) {
-    console.log(newArr[i]);
-    if (newArr[i] === '--discard-next') {
-      console.log('нашлась управляющая последовательсность discard-next');
-      newArr.splice([i], 2);
-    }
+    switch (newArr[i]) {
+      case ('--discard-prev'):
+        if (i > 0) {
+          console.log(`i: ${i}`);
+          console.log('зависимость стоит не в начале');
+          newArr.splice([i - 1], 2);
+        } else {
+          console.log('зависимость стоит в самом начале');
+          newArr.splice([i], 1);
+        }
+        break;
 
-    if (newArr[i] === '--discard-prev') {
-      console.log('нашлась управляющая последовательсность discard-prev');
-      newArr.splice([i - 1], 2);
+      case ('--discard-next'):
+        newArr.splice([i], 2);
+        steck = '--discard-next';
+
+      case ('--double-prev'):
+        if (steck === '--discard-next') {
+          newArr.splice([i], 1);
+        } else {
+          newArr.splice([i], 1, newArr[i - 1]);
+        }
+        steck = '';
+        break;
+        
+      case ('--double-next'):
+        newArr.splice([i], 1, newArr[i + 1]);
+        break;
     }
   }
+
+
+
   console.log(`newArr22: ${newArr}`);
   return newArr;
 
 };
 
-transform([1, 2, 3, '--discard-next', 4, 5, 6, '--discard-prev', 7, 8]);
-// transform([1, 2, 3, '--discard-prev', 4, 5]);
-
-// let massiveNEXT = [1, 2, 3, '--discard-next', 4, 5];
-// massiveNEXT.splice(3, 1, '555');
-// console.log(massiveNEXT);
-
-// let massivePREV = [1, 2, 3, '--discard-prev', 4, 5];
-// massivePREV.splice(3, 1);
-// console.log(massivePREV);
+// transform([1, 2, 3, '--discard-next', 1337, '--double-prev', 4, 5]);
+// transform([1, 2, 3, 1337, '--double-prev', 4, 5]);
+// transform([1, 2, 3, '--double-next', 1337, '--double-prev', 4, 5]);
+// transform([1, 2, 3, '--discard-next', 1337, '--discard-prev', 4, 5]);
+// transform([1, 2, 3, '--double-next', 1337, '--discard-prev', 4, 5]);
+// transform(['--discard-prev', 1, 2, 3]);
+transform(['--double-prev', 1, 2, 3]);
+// transform([1, 2, 3, '--double-next']);
+// transform([1, 2, 3, '--discard-next']);
