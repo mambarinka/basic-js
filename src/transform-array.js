@@ -6,55 +6,58 @@ function transform(arr) {
     throw new Error('argument is nor array');
   }
 
-  // let newArr = [...arr];
-  let newArr = Object.assign([], arr);
-  console.log(newArr);
-  let steck = 0;
-  for (let i = 0; i < newArr.length; i++) {
-    switch (newArr[i]) {
+  let newArr = [];
+  for (let i = 0; i < arr.length; i++) {
+
+    switch (arr[i]) {
       case ('--discard-prev'):
-        if (i > 0) {
-          console.log(`i: ${i}`);
-          console.log('зависимость стоит не в начале');
-          newArr.splice([i - 1], 2);
-        } else {
-          console.log('зависимость стоит в самом начале');
-          newArr.splice([i], 1);
+        if (i === 0) {
+          break;
+        }
+        if (arr[i - 2] !== '--discard-next') {
+          newArr.pop();
         }
         break;
 
       case ('--discard-next'):
-        newArr.splice([i], 2);
-        steck = '--discard-next';
+        if (i + 1 === undefined) {
+          break;
+        } else {
+          i++;
+        }
+        break;
 
       case ('--double-prev'):
-        if (steck === '--discard-next') {
-          newArr.splice([i], 1);
-        } else {
-          newArr.splice([i], 1, newArr[i - 1]);
+        if (i === 0) {
+          break;
         }
-        steck = '';
+        if (arr[i - 2] !== '--discard-next') {
+          newArr.push(arr[i - 1]);
+        }
         break;
-        
+
       case ('--double-next'):
-        newArr.splice([i], 1, newArr[i + 1]);
+        if (i + 1 === undefined) {
+          break;
+        } else {
+          newArr.push(arr[i + 1]);
+        }
         break;
+
+      default:
+        newArr.push(arr[i]);
     }
   }
-
-
-
-  console.log(`newArr22: ${newArr}`);
+  console.log(`newArr60: ${newArr}`);
   return newArr;
 
 };
 
-// transform([1, 2, 3, '--discard-next', 1337, '--double-prev', 4, 5]);
-// transform([1, 2, 3, 1337, '--double-prev', 4, 5]);
-// transform([1, 2, 3, '--double-next', 1337, '--double-prev', 4, 5]);
-// transform([1, 2, 3, '--discard-next', 1337, '--discard-prev', 4, 5]);
-// transform([1, 2, 3, '--double-next', 1337, '--discard-prev', 4, 5]);
-// transform(['--discard-prev', 1, 2, 3]);
+transform(['--discard-prev', 1, 2, 3]);
 transform(['--double-prev', 1, 2, 3]);
-// transform([1, 2, 3, '--double-next']);
-// transform([1, 2, 3, '--discard-next']);
+transform([1, 2, 3, '--double-next']);
+transform([1, 2, 3, '--discard-next']);
+transform([1, 2, 3, '--discard-next', 1337, '--double-prev', 4, 5]);
+transform([1, 2, 3, '--double-next', 1337, '--double-prev', 4, 5]);
+transform([1, 2, 3, '--discard-next', 1337, '--discard-prev', 4, 5]);
+transform([1, 2, 3, '--double-next', 1337, '--discard-prev', 4, 5]);
