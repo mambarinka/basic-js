@@ -1,12 +1,12 @@
 const CustomError = require("../extensions/custom-error");
 
-// module.exports = function transform(arr) {
-function transform(arr) {
+module.exports = function transform(arr) {
   if (!Array.isArray(arr)) {
     throw new Error('argument is nor array');
   }
 
   let newArr = [];
+
   for (let i = 0; i < arr.length; i++) {
 
     switch (arr[i]) {
@@ -20,7 +20,7 @@ function transform(arr) {
         break;
 
       case ('--discard-next'):
-        if (i + 1 === undefined) {
+        if (i === arr.length - 1) {
           break;
         } else {
           i++;
@@ -37,7 +37,7 @@ function transform(arr) {
         break;
 
       case ('--double-next'):
-        if (i + 1 === undefined) {
+        if (i === arr.length - 1) {
           break;
         } else {
           newArr.push(arr[i + 1]);
@@ -48,16 +48,6 @@ function transform(arr) {
         newArr.push(arr[i]);
     }
   }
-  console.log(`newArr60: ${newArr}`);
+  
   return newArr;
-
 };
-
-transform(['--discard-prev', 1, 2, 3]);
-transform(['--double-prev', 1, 2, 3]);
-transform([1, 2, 3, '--double-next']);
-transform([1, 2, 3, '--discard-next']);
-transform([1, 2, 3, '--discard-next', 1337, '--double-prev', 4, 5]);
-transform([1, 2, 3, '--double-next', 1337, '--double-prev', 4, 5]);
-transform([1, 2, 3, '--discard-next', 1337, '--discard-prev', 4, 5]);
-transform([1, 2, 3, '--double-next', 1337, '--discard-prev', 4, 5]);
