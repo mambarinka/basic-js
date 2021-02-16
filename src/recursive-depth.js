@@ -1,22 +1,21 @@
 const CustomError = require("../extensions/custom-error");
 
-module.exports = class DepthCalculator {
-  // class DepthCalculator {
-  calculateDepth(arr) {
-    if (!Array.isArray(arr)) {
+module.exports = class DepthCalculator { //создает функцию с именем DepthCalculator
+
+  constructor() { // метод класса, в котором хранится код функции DepthCalculator
+    this.calculateDepth = this.calculateDepth.bind(this); //чтобы не потерять контекст функции 
+  }
+
+  calculateDepth(arr) { //класс DepthCalculator сохраняет метод calculateDepth в User.prototype. 
+    // При вызове метода объекта new User он будет взят из прототипа
+    if (Array.isArray(arr)) {
+      if (arr.length === 0) {
+        return 1;
+      } else {
+        return 1 + Math.max(...arr.map(this.calculateDepth));
+      }
+    } else {
       return 0;
     }
-    let depthArray = 1;
-    for (let i = 0; i < arr.length; i++) {
-      console.log(depthArray);
-      return Array.isArray(arr[i]) ?
-        depthArray = Math.max(depthArray, this.calculateDepth(arr[i] + 1)) :
-        0;
-    }
-
   }
 };
-
-// const depthCalc = new DepthCalculator();
-// depthCalc.calculateDepth([1, 2, 3, 4, 5, [1]]);
-// depthCalc.calculateDepth([1, 2, 3, [4, 5]]);
