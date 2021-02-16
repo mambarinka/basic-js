@@ -2,22 +2,37 @@ const CustomError = require("../extensions/custom-error");
 
 // module.exports = function repeater(str, options) {
 function repeater(str, options) {
-  let repeatStr = str.split(' ');
+  let repeatArray = [];
 
-  const repeatFn = (array, repeatTimes, separator) => {
-    for (let i = 1; i < repeatTimes; i++) {
-      return array.push(separator);
+  const repeatFn = (array, string, repeatTimes, separator) => {
+    for (let i = 0; i < repeatTimes; i++) {
+      array.push(string);
     }
-  }
- 
-  }
-  console.log(repeatStr.join(options.separator));
-  return repeatStr.join(options.separator);
+    return array.join(separator);
+  };
+
+  let repeatArrayAdd = [];
+
+  let strAdd = repeatFn(repeatArrayAdd, options.addition, options.additionRepeatTimes, options.additionSeparator);
+  console.log(strAdd);
+
+  console.log(repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator));
+
+  return repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator);
+
+
+
+  // console.log(repeatStr.join(options.separator));
+  // return repeatStr.join(options.separator);
 };
 
 repeater('STRING', {
   repeatTimes: 3,
   separator: '**',
   addition: 'PLUS',
-  additionRepeatTimes: 3
+  additionRepeatTimes: 3,
+  additionSeparator: '00'
 });
+
+// STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS
+// STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS
