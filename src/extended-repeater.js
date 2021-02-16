@@ -1,24 +1,29 @@
 const CustomError = require("../extensions/custom-error");
 
-// module.exports = function repeater(str, options) {
-function repeater(str, options) {
+module.exports = function repeater(str, options) {
+  // function repeater(str, options) {
   let repeatArray = [];
 
-  const repeatFn = (array, string, repeatTimes, separator) => {
+  const repeatFn = (array, string, repeatTimes, separator = '+', addSeparator = '|') => {
     for (let i = 0; i < repeatTimes; i++) {
       array.push(string);
     }
-    return array.join(separator);
+
+    if (separator !== '') {
+      return Array.prototype.join.call(array, separator);
+    } else {
+      return Array.prototype.join.call(array, addSeparator);
+    }
   };
 
   let repeatArrayAdd = [];
 
-  let strAdd = repeatFn(repeatArrayAdd, options.addition, options.additionRepeatTimes, options.additionSeparator);
+  let strAdd = repeatFn(repeatArrayAdd, options.addition, options.additionRepeatTimes, '', options.additionSeparator);
   console.log(strAdd);
 
-  console.log(repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator));
+  console.log(repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator, ''));
 
-  return repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator);
+  return repeatFn(repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator, ''));
 
 
 
@@ -26,13 +31,12 @@ function repeater(str, options) {
   // return repeatStr.join(options.separator);
 };
 
-repeater('STRING', {
-  repeatTimes: 3,
-  separator: '**',
-  addition: 'PLUS',
-  additionRepeatTimes: 3,
-  additionSeparator: '00'
-});
-
-// STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS
-// STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS
+// repeater('la', {
+//   repeatTimes: 3
+// });
+// repeater('single', {
+//   repeatTimes: 1
+// });
+// repeater('12345', {
+//   repeatTimes: 5
+// });
