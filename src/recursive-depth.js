@@ -7,7 +7,7 @@ module.exports = class DepthCalculator { //создает функцию с им
   }
 
   calculateDepth(arr) { //класс DepthCalculator сохраняет метод calculateDepth в User.prototype. 
-    // При вызове метода объекта new User он будет взят из прототипа
+    // При вызове метода объекта new DepthCalculator он будет взят из прототипа
     if (Array.isArray(arr)) {
       if (arr.length === 0) {
         return 1;
