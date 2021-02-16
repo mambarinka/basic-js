@@ -5,9 +5,17 @@ module.exports = function repeater(str, options) {
   let repeatArray = [];
 
   const repeatFn = (array, string, repeatTimes, separator = '+', addSeparator = '|') => {
-    for (let i = 0; i < repeatTimes; i++) {
+
+    if (repeatTimes === undefined) {
       array.push(string);
+    } else {
+      for (let i = 0; i < repeatTimes; i++) {
+        array.push(string);
+      }
     }
+
+
+
 
     if (separator !== '') {
       return Array.prototype.join.call(array, separator);
@@ -21,9 +29,12 @@ module.exports = function repeater(str, options) {
   let strAdd = repeatFn(repeatArrayAdd, options.addition, options.additionRepeatTimes, '', options.additionSeparator);
   console.log(strAdd);
 
-  console.log(repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator, ''));
 
-  return repeatFn(repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator, ''));
+  let finishStr = repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator, '');
+  console.log(finishStr);
+
+  return finishStr;
+
 
 
 
@@ -31,12 +42,12 @@ module.exports = function repeater(str, options) {
   // return repeatStr.join(options.separator);
 };
 
-// repeater('la', {
-//   repeatTimes: 3
+// repeater('TESTstr', {
+//   repeatTimes: undefined,
+//   separator: 'ds',
+//   addition: 'ADD!',
+//   additionRepeatTimes: undefined,
+//   additionSeparator: ')))000'
 // });
-// repeater('single', {
-//   repeatTimes: 1
-// });
-// repeater('12345', {
-//   repeatTimes: 5
-// });
+// TESTstrADD!
+// repeater(null, { repeatTimes: 3, separator: '??? ', addition: null, additionRepeatTimes: 3, additionSeparator: '!!!' });
