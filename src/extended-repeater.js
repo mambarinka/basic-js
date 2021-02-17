@@ -3,10 +3,10 @@ const CustomError = require("../extensions/custom-error");
 module.exports = function repeater(str, options) {
   let repeatArray = [];
 
-  const repeatFn = (array, string, repeatTimes, separator = '+', addSeparator = '|') => {
-
+  let repeatFn = (array, string, repeatTimes, separator = '+', addSeparator = '|') => {
     if (repeatTimes === undefined) {
-      array.push(string);
+
+      array.push(String(string));
     } else {
       for (let i = 0; i < repeatTimes; i++) {
         array.push(String(string));
@@ -14,20 +14,20 @@ module.exports = function repeater(str, options) {
     }
 
     if (separator !== '') {
-      return Array.prototype.join.call(array, separator);
+      return array.join(separator);
     } else {
-      return Array.prototype.join.call(array, addSeparator);
+      return array.join(addSeparator);
     }
+
   };
 
   let repeatArrayAdd = [];
+  let strAdd = '';
+  if (options.addition || options.addition === false || options.addition === null) {
+    strAdd = repeatFn(repeatArrayAdd, options.addition, options.additionRepeatTimes, '', options.additionSeparator);
+  }
 
-  let strAdd = repeatFn(repeatArrayAdd, options.addition, options.additionRepeatTimes, '', options.additionSeparator);
-  console.log(strAdd);
 
-
-  let finishStr = repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator, '');
-  console.log(finishStr);
-
-  return finishStr;
+  let result = repeatFn(repeatArray, str + strAdd, options.repeatTimes, options.separator, '');
+  return result;
 };
