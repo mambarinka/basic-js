@@ -18,7 +18,9 @@ class VigenereCipheringMachine {
     let symbol = '';
     let notEngArray = [];
     let messageLowercase = message.toLowerCase();
+    console.log(messageLowercase);
     let keyLowerCase = key.toLowerCase();
+    console.log(keyLowerCase);
 
     if (!message || !key) {
       throw new Error('parameter not passed');
@@ -53,10 +55,12 @@ class VigenereCipheringMachine {
         }
 
         result += symbol.toUpperCase();
+        // console.log(result);
       }
 
-      if (directMachine === true) {
+      if (directMachine) {
         console.log(`result: ${result}`);
+        console.log(typeof result);
         return result;
       } else {
         let resultReverse = result.split('').reverse().join('');
@@ -64,7 +68,6 @@ class VigenereCipheringMachine {
         console.log(directMachine);
         return resultReverse;
       }
-
     }
   }
 
@@ -100,6 +103,10 @@ const directMachine = new VigenereCipheringMachine();
 
 directMachine.encrypt('attack at dawn!', 'alphonse');
 // AEIHQX SX DLLU!
+// AEIHQX SX DLLU!
 
-directMachine.decrypt('UWJJW XAGWLNFM VNNNDXHVWWL :)', 'js');
+// directMachine.decrypt('UWJJW XAGWLNFM VNNNDXHVWWL :)', 'js');
 // LEARN FRONTEND DEVELOPMENT :)
+
+
+directMachine.decrypt(directMachine.encrypt('attack at dawn!', 'alphonse'), 'alphonse');
