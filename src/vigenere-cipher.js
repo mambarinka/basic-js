@@ -2,6 +2,10 @@ const CustomError = require("../extensions/custom-error");
 
 class VigenereCipheringMachine {
   constructor(isDirectMachine) {
+    if (isDirectMachine === undefined) {
+      isDirectMachine = true;
+    }
+
     this.isDirectMachine = isDirectMachine;
     this.alphabet = ['a', 'b', 'c', 'd', 'e', 'f',
       'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
@@ -9,7 +13,7 @@ class VigenereCipheringMachine {
       'y', 'z'
     ];
   }
-  cypher(message, key, encOrDec) {
+  cypher(message, key, directMachine, encOrDec) {
     let result = '';
     let symbol = '';
     let notEngArray = [];
@@ -41,29 +45,47 @@ class VigenereCipheringMachine {
           let mesIndex = this.alphabet.indexOf(messageLowercase[i]);
           let keyIndex = this.alphabet.indexOf(keyResult[i]);
 
-          if (encOrDec === true) {
+          if (encOrDec) {
             symbol = this.alphabet[(mesIndex + keyIndex) % this.alphabet.length]; //по формуле из WiKi
           } else {
             symbol = this.alphabet[(mesIndex + this.alphabet.length - keyIndex) % this.alphabet.length];
           }
         }
 
-        result += symbol;
+        result += symbol.toUpperCase();
       }
 
-      console.log(result.toUpperCase());
-      return result.toUpperCase();
+      if (directMachine === true) {
+        console.log(`result: ${result}`);
+        return result;
+      } else {
+        let resultReverse = result.split('').reverse().join('');
+        console.log(`resultReverse: ${resultReverse}`);
+        console.log(directMachine);
+        return resultReverse;
+      }
+
     }
   }
 
-
   encrypt(message, key) {
-    this.cypher(message, key, true);
+    if (this.isDirectMachine) {
+      console.log('directmachine');
+      this.cypher(message, key, true, true);
+    } else if (this.isDirectMachine) {
+      console.log('not directmachine');
+      this.cypher(message, key, false, true);
+    }
   }
 
-
   decrypt(message, key) {
-    this.cypher(message, key, false);
+    if (this.isDirectMachine) {
+      console.log('directmachine');
+      this.cypher(message, key, true, false);
+    } else {
+      console.log('not directmachine');
+      this.cypher(message, key, false, false);
+    }
   }
 }
 
@@ -71,7 +93,13 @@ class VigenereCipheringMachine {
 module.exports = VigenereCipheringMachine;
 
 const directMachine = new VigenereCipheringMachine();
-directMachine.encrypt('Samelengthkey', 'Samelengthkey');
-// KAYIWIAMMOUIW
+// directMachine.encrypt('Samelengthkey', 'Samelengthkey');
+// // KAYIWIAMMOUIW
 
-directMachine.decrypt('AEIHQX SX DLLU!', 'alphonse');
+// directMachine.decrypt('AEIHQX SX DLLU!', 'alphonse');
+
+directMachine.encrypt('attack at dawn!', 'alphonse');
+// AEIHQX SX DLLU!
+
+directMachine.decrypt('UWJJW XAGWLNFM VNNNDXHVWWL :)', 'js');
+// LEARN FRONTEND DEVELOPMENT :)
