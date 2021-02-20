@@ -1,40 +1,41 @@
 const CustomError = require("../extensions/custom-error");
 
 const cypher = function (message, key, directMachine, encOrDec) {
-  let alphabet = ['a', 'b', 'c', 'd', 'e', 'f',
-    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-    'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-    'y', 'z'
+  let alphabet = ['A', 'B', 'C', 'D', 'E', 'F',
+    'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+    'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+    'Y', 'Z'
   ];
+
   let result = '';
   let symbol = '';
   let notEngArray = [];
-  let messageLowercase = message.toLowerCase();
-  let keyLowerCase = key.toLowerCase();
+  let messageUppercase = message.toUpperCase();
+  let keyUpperCase = key.toUpperCase();
 
   if (!message || !key) {
     throw new Error('parameter not passed');
   } else {
-    for (let i = 0; i < messageLowercase.length; i++) {
-      if (!alphabet.includes(messageLowercase[i])) { // если какой-либо символ текста не содержит англ
-        notEngArray.push(messageLowercase[i]);
+    for (let i = 0; i < messageUppercase.length; i++) {
+      if (!alphabet.includes(messageUppercase[i])) { // если какой-либо символ текста не содержит англ
+        notEngArray.push(messageUppercase[i]);
       }
     }
 
-    let keyResult = keyLowerCase.split('');
+    let keyResult = keyUpperCase.split('');
 
-    while (keyResult.length < (messageLowercase.length - notEngArray.length)) { // если ключ меньше по длине , чем текст
-      for (let i = 0; i < messageLowercase.length; i++) {
+    while (keyResult.length < (messageUppercase.length - notEngArray.length)) { // если ключ меньше по длине , чем текст
+      for (let i = 0; i < messageUppercase.length; i++) {
         keyResult.push(keyResult[i]);
       }
     }
 
-    for (let i = 0; i < messageLowercase.length; i++) {
-      if (!alphabet.includes(messageLowercase[i])) { // если символ не англ, то просто вставляй в результат
-        symbol = messageLowercase[i];
+    for (let i = 0; i < messageUppercase.length; i++) {
+      if (!alphabet.includes(messageUppercase[i])) { // если символ не англ, то просто вставляй в результат
+        symbol = messageUppercase[i];
         keyResult.splice(keyResult[i], 0, ' ');
       } else {
-        let mesIndex = alphabet.indexOf(messageLowercase[i]);
+        let mesIndex = alphabet.indexOf(messageUppercase[i]);
         let keyIndex = alphabet.indexOf(keyResult[i]);
         if (encOrDec) {
           symbol = alphabet[(mesIndex + keyIndex) % alphabet.length]; //по формуле из WiKi
@@ -42,7 +43,7 @@ const cypher = function (message, key, directMachine, encOrDec) {
           symbol = alphabet[(mesIndex + alphabet.length - keyIndex) % alphabet.length];
         }
       }
-      result += symbol.toUpperCase();
+      result += symbol;
     }
   }
 
