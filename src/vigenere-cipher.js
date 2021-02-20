@@ -9,45 +9,30 @@ const cypher = function (message, key, directMachine, encOrDec) {
 
   let result = '';
   let symbol = '';
-  let notEngArray = [];
   let messageUppercase = message.toUpperCase();
   let keyUpperCase = key.toUpperCase();
+  let keyCounter = 0;
 
-  if (!message || !key) {
-    throw new Error('parameter not passed');
-  } else {
-    for (let i = 0; i < messageUppercase.length; i++) {
-      if (!alphabet.includes(messageUppercase[i])) { // если какой-либо символ текста не содержит англ
-        notEngArray.push(messageUppercase[i]);
-      }
-    }
+  for (let i = 0; i < messageUppercase.length; i++) {
+    if (!alphabet.includes(messageUppercase[i])) { // если символ не англ, то просто вставляй символ
+      symbol = messageUppercase[i];
+    } else {
+      let mesIndex = alphabet.indexOf(messageUppercase[i]);
+      let keyIndex = alphabet.indexOf(keyUpperCase[keyCounter % keyUpperCase.length]);
+      keyCounter++;
 
-    let keyResult = keyUpperCase.split('');
-
-    while (keyResult.length < (messageUppercase.length - notEngArray.length)) { // если ключ меньше по длине , чем текст
-      for (let i = 0; i < messageUppercase.length; i++) {
-        keyResult.push(keyResult[i]);
-      }
-    }
-
-    for (let i = 0; i < messageUppercase.length; i++) {
-      if (!alphabet.includes(messageUppercase[i])) { // если символ не англ, то просто вставляй в результат
-        symbol = messageUppercase[i];
-        keyResult.splice(keyResult[i], 0, ' ');
+      if (encOrDec) {
+        symbol = alphabet[(mesIndex + keyIndex) % alphabet.length]; //по формуле из WiKi
       } else {
-        let mesIndex = alphabet.indexOf(messageUppercase[i]);
-        let keyIndex = alphabet.indexOf(keyResult[i]);
-        if (encOrDec) {
-          symbol = alphabet[(mesIndex + keyIndex) % alphabet.length]; //по формуле из WiKi
-        } else {
-          symbol = alphabet[(mesIndex + alphabet.length - keyIndex) % alphabet.length];
-        }
+        symbol = alphabet[(mesIndex + alphabet.length - keyIndex) % alphabet.length];
       }
-      result += symbol;
+
     }
+    result += symbol;
   }
 
   if (directMachine) {
+    console.log(result);
     return result;
   } else {
     let resultReverse = result.split('').reverse().join('');
@@ -80,6 +65,5 @@ class VigenereCipheringMachine {
     }
   }
 }
-
 
 module.exports = VigenereCipheringMachine;
